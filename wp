@@ -24,6 +24,7 @@ Help()
 ##################
 package="\usepackage{}"
 tex="$1"
+des="/home/sputter/Latex_Files"
 while getopts "hr:c:" option; do
 	case $option in 
 		h)Help
@@ -33,9 +34,9 @@ while getopts "hr:c:" option; do
 		tex=$OPTARG;;
 		c)
 		tex=$OPTARG
-		find ~/Latex_Files/$tex/* '(' \! -name '*.tex' \! -name '*.pdf' ')' -delete
-		tar -czvf $tex.tar.gz $tex
-		rm -r $tex
+		find $des/$tex/* '(' \! -name '*.tex' \! -name '*.pdf' ')' -delete
+		tar -czvf $des/$tex.tar.gz $tex
+		rm -r $des/$tex
 		exit;;
 		\?) 
 		echo "Invalid option"
