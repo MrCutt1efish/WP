@@ -1,0 +1,59 @@
+#!/bin/bash
+##################
+# Help Function  #
+##################
+
+Help()
+(
+	echo "    Generates an organized tex environment"
+	echo
+	echo "    wp: wp [-h|r|m|f] file-name"
+	echo "    Options:"
+	echo "      -h       Open this help menu"
+	echo "      -r       Includes packages for Russian Support"
+	echo "      -c       Compress and archive tex file directory"
+	#echo "      ~m       Includes packages for advanced mathematics"
+	#echo "      -f       Full package support"
+	echo
+)
+
+##################
+##################
+#  Main Program  #
+##################
+##################
+package="\usepackage{}"
+tex="$1"
+while getopts "hr:c:" option; do
+	case $option in 
+		h)Help
+		exit;;
+		r)
+		package="\usepackage[utf8]{inputenc} \usepackage[russian]{babel}"
+		tex=$OPTARG;;
+		c)
+		tex=$OPTARG
+		find ~/Latex_Files/$tex/* '(' \! -name '*.tex' \! -name '*.pdf' ')' -delete
+		tar -czvf $tex.tar.gz $tex
+		rm -r $tex
+		exit;;
+		\?) 
+		echo "Invalid option"
+		Help
+			exit;;
+	esac
+done 
+mkdir ~/Latex_Files/$tex
+mkdir ~/Latex_Files/$tex/acc
+touch ~/Latex_Files/$tex/$tex.tex
+file=~/Latex_Files/$tex/$tex.tex
+{
+	echo "\documentclass{article}"
+	echo "\usepackage{graphicx, float, enumitem}"
+	echo $package
+	echo "\graphicspath{{~/Latex_Files/$tex/acc}}"
+	echo "\begin{document}"
+	echo
+	echo "\end{document}"
+}>>$file
+vim ~/Latex_Files/$tex/$tex.tex
